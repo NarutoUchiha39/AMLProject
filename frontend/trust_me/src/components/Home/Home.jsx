@@ -32,20 +32,24 @@ const props = {
 };
 return(
     <div className="upload" style={{height:"50vh"}}>
-        <Dragger {...props} style={{marginBottom:"2rem"}}>
-            <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">
-            Support for a single upload. 
-            </p>
-        </Dragger>
+          {!imageUrl && <Dragger {...props} style={{marginBottom:"2rem"}}>
+              <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+              </p>
+              <p className="ant-upload-text">Click or drag file to this area to upload</p>
+              <p className="ant-upload-hint">
+              Support for a single upload. 
+              </p>
+          </Dragger>
+        }
 
         {imageUrl && (
+        
         <div>
-          <h3>Processed Image:</h3>
+        <div>
+          <h3>Segmented Image:</h3>
           <img src={`${imageUrl}`} alt="Processed result" style={{ maxWidth: '100%' }} />
+        </div>
         </div>
       )}
   </div>
