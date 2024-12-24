@@ -4,6 +4,6 @@ include
 lib
 lib64
 node_modules
-segmented_images
+# segmented_images
 model.keras
 uploads
