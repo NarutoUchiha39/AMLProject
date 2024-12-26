@@ -1,12 +1,32 @@
 import React from 'react';
 import { InboxOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
+import { message, Table, Upload } from 'antd';
 import { useState } from 'react';
 const { Dragger } = Upload;
 
 
 const Home = () => {
 const [imageUrl, setImageUrl] = useState(null); 
+const [dataSource,setDataSource] = useState(null)
+const columns = [{
+  title:'Model',
+  dataIndex:'model',
+  key:'model'
+},
+
+{
+  title:'Accuracy',
+  dataIndex:'accuracy',
+  key:'accuracy'
+},
+
+{
+  title:'Category',
+  dataIndex:'category',
+  key:'category'
+},
+
+]
 const props = {
   name: 'file',
   multiple: false,
@@ -19,7 +39,32 @@ const props = {
     if (status === 'done') {
     
       console.log(info.file.response.image_url)
-     setImageUrl(info.file.response.image_url)
+      setImageUrl(info.file.response.image_url)
+
+      let resnet_prediction_category = info.file.response.predictions[0]
+      let vgg19_prediction_category = info.file.response.predictions[1]
+
+      let vgg19_confidence = info.file.response.confidence[0]
+      let resnet_confidence = info.file.response.confidence[1]
+
+      let dataSource = [
+        {
+          key:'1',
+          model:'ResNet50',
+          accuracy:resnet_confidence,
+          category:resnet_prediction_category
+        },
+
+        {
+
+          key:'2',
+          model:'Vgg19',
+          accuracy:vgg19_confidence,
+          category:vgg19_prediction_category
+        }
+      ]
+      console.log(dataSource)
+      setDataSource(dataSource)
       message.success(`${info.file.name} file uploaded successfully.`);
 
     } else if (status === 'error') {
@@ -45,11 +90,15 @@ return(
 
         {imageUrl && (
         
-        <div>
-        <div>
-          <h3>Segmented Image:</h3>
-          <img src={`${imageUrl}`} alt="Processed result" style={{ maxWidth: '100%' }} />
-        </div>
+        <div style={{display:'flex',justifyContent:"center",alignItems:"center"}}>
+            <div style={{marginRight:"10rem"}}>
+              <h3>Segmented Image:</h3>
+              <img src={`${imageUrl}`} alt="Processed result" style={{ maxWidth: '100%' }} />
+            </div>
+
+            <Table
+              columns={columns} dataSource={dataSource}
+            />
         </div>
       )}
   </div>
